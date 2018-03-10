@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Table } from 'reactstrap';
 
 const list = [ {
   title: 'React',
@@ -52,17 +53,23 @@ class App extends Component {
     
     return (
       <div className="App">
-        <Search
-          value={searchTerm}
-          onChange={this.onSearchChange}
-        >
-          Search
-        </Search>
-        <Table
-          list={list}
-          pattern={searchTerm}
-          onDismiss={this.onDismiss}
-        />
+        <div className='main-container'>
+          <div className="search-container">
+            <Search
+              value={searchTerm}
+              onChange={this.onSearchChange}
+            >
+              Search
+            </Search>
+          </div>
+          <div className="news-table-container">
+            <NewsTable
+              list={list}
+              pattern={searchTerm}
+              onDismiss={this.onDismiss}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -78,29 +85,40 @@ const Search = ({ value, onChange, children }) =>
     />
   </form>;
 
-const Table = ({ list, pattern, onDismiss }) =>
-  <div>
+const NewsTable = ({ list, pattern, onDismiss }) =>
+  <Table striped>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th># of Comments</th>
+        <th>Points</th>
+        <th>Dismiss</th>
+      </tr>
+    </thead>
+    <tbody>
     {list.filter(isSearched(pattern)).map((item) =>
-      <div key={item.objectID}>
-        <span>
+      <tr key={item.objectID}>
+        <td>
           <a href={item.url}>{item.title}</a>
-        </span>
-        <span>{item.author}</span>
-        <span>{item.num_comments}</span>
-        <span>{item.points}</span>
-        <span>
-          <Button
+        </td>
+        <td>{item.author}</td>
+        <td>{item.num_comments}</td>
+        <td>{item.points}</td>
+        <td>
+          <CustomButton
             onClick={() => onDismiss(item.objectID)}
           >
             Dismiss
-          </Button>
-        </span>
-      </div>
+          </CustomButton>
+        </td>
+      </tr>
     )}
-  </div>;
+    </tbody>
+  </Table>;
 
 
-const Button = ({ onClick, className='', children}) =>
+const CustomButton = ({ onClick, className = '', children }) =>
   <button
     onClick={onClick}
     className={className}
