@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Table } from 'reactstrap';
+import { Table, Button, Form, Input, FormGroup } from 'reactstrap';
 
 const DEFAULT_QUERY = 'redux';
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
-
-function isSearched(searchTerm) {
-  return function (item) {
-    return item.title.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-}
 
 class App extends Component {
   constructor(props) {
@@ -22,15 +16,19 @@ class App extends Component {
       result: null,
       searchTerm: DEFAULT_QUERY
     };
-    
+  
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
   
   componentDidMount() {
     const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+  }
   
+  fetchSearchTopStories(searchTerm) {
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
@@ -43,7 +41,6 @@ class App extends Component {
   
   onDismiss(id) {
     const updatedList = this.state.result.hits.filter((item) => item.objectID !== id);
-    
     this.setState({ result: {...this.state.result, hits: updatedList} });
   }
   
@@ -52,6 +49,13 @@ class App extends Component {
       searchTerm: event.target.value
     })
   }
+  
+  onSearchSubmit(event) {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+    event.preventDefault();
+  }
+  
   render() {
     const { searchTerm, result } = this.state;
     
@@ -62,38 +66,47 @@ class App extends Component {
     return (
       <div className="App">
         <div className='main-container'>
-          <div className="search-container">
-            <Search
-              value={searchTerm}
-              onChange={this.onSearchChange}
-            >
-              Search
-            </Search>
+          <div className="search-container container">
+            <div className="row justify-content-md-center">
+              <div className="col-4">
+                <Search
+                  value={searchTerm}
+                  onChange={this.onSearchChange}
+                  onSubmit={this.onSearchSubmit}
+                >
+                  Search
+                </Search>
+              </div>
+            </div>
           </div>
+          {result &&
           <div className="news-table-container">
             <NewsTable
               list={result.hits}
-              pattern={searchTerm}
               onDismiss={this.onDismiss}
             />
           </div>
+          }
         </div>
       </div>
     );
   }
 }
 
-const Search = ({ value, onChange, children }) =>
-  <form>
-    {children}
-    <input
-      type='text'
-      value={value}
-      onChange={onChange}
-    />
-  </form>;
+const Search = ({ value, onChange, onSubmit, children }) =>
+  <Form inline onSubmit={onSubmit}>
+    <FormGroup className='mr-3'>
+      <Input
+        type='text'
+        id="inputNewsSearch"
+        value={value}
+        onChange={onChange}
+      />
+    </FormGroup>
+    <Button type='submit'>{children}</Button>
+  </Form>;
 
-const NewsTable = ({ list, pattern, onDismiss }) =>
+const NewsTable = ({ list, onDismiss }) =>
   <Table striped>
     <thead>
       <tr>
@@ -105,7 +118,7 @@ const NewsTable = ({ list, pattern, onDismiss }) =>
       </tr>
     </thead>
     <tbody>
-    {list.filter(isSearched(pattern)).map((item) =>
+    {list.map((item) =>
       <tr key={item.objectID}>
         <td>
           <a href={item.url}>{item.title}</a>
