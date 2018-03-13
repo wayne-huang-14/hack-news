@@ -16,7 +16,8 @@ class App extends Component {
     super(props);
     
     this.state = {
-      result: null,
+      results: null,
+      searchKey: '',
       searchTerm: DEFAULT_QUERY
     };
   
@@ -24,11 +25,25 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
   }
   
   componentDidMount() {
     const { searchTerm } = this.state;
+    // A non-fluctuating state is used to cache the search term being used
+    this.setState({ searchKey: searchTerm });
     this.fetchSearchTopStories(searchTerm);
+  }
+  
+  /**
+   * Checks if the searchTerm is not already in the cached results state
+   *
+   * @param searchTerm
+   *
+   * @returns {boolean}
+   */
+  needsToSearchTopStories(searchTerm) {
+    return !this.state.results[searchTerm];
   }
   
   fetchSearchTopStories(searchTerm, page = 0) {
@@ -40,9 +55,10 @@ class App extends Component {
   
   setSearchTopStories(result) {
     const { hits, page } = result;
+    const { searchKey, results } = this.state;
     
-    const oldHits = page !== 0
-      ? this.state.result.hits
+    const oldHits = results && results[searchKey]
+      ? results[searchKey].hits
       : [];
     
     const updatedHits = [
@@ -51,16 +67,25 @@ class App extends Component {
     ];
     
     this.setState({
-      result: {
-        hits: updatedHits,
-        page
+      results: {
+        ...results,
+        [searchKey]: {hits: updatedHits, page}
       }
     });
   }
   
   onDismiss(id) {
-    const updatedList = this.state.result.hits.filter((item) => item.objectID !== id);
-    this.setState({ result: {...this.state.result, hits: updatedList} });
+    const { searchKey, results } = this.state;
+    const { hits, page} = results[searchKey];
+    
+    const updatedHits = hits.filter((item) => item.objectID !== id);
+    
+    this.setState({
+      results: {
+        ...results,
+        [searchKey]: {hits: updatedHits, page}
+      }
+    });
   }
   
   onSearchChange(event) {
@@ -71,13 +96,22 @@ class App extends Component {
   
   onSearchSubmit(event) {
     const { searchTerm } = this.state;
-    this.fetchSearchTopStories(searchTerm);
+    this.setState({ searchKey: searchTerm });
+    
+    // Only do a GET request if the searchTerm is not in the cached list
+    if (this.needsToSearchTopStories(searchTerm)) {
+      this.fetchSearchTopStories(searchTerm);
+    }
+    
     event.preventDefault();
   }
   
   render() {
-    const { searchTerm, result } = this.state;
-    const page = (result && result.page) || 0;
+    const { searchTerm, results, searchKey } = this.state;
+    const page = (results && results[searchKey] && results[searchKey].page) || 0;
+    const list = (
+      results && results[searchKey] && results[searchKey].hits
+    ) || [];
     
     return (
       <div className="App">
@@ -95,17 +129,15 @@ class App extends Component {
               </div>
             </div>
           </div>
-          {result &&
-            <div className="news-table-container">
-              <NewsTable
-                list={result.hits}
-                onDismiss={this.onDismiss}
-              />
-            </div>
-          }
+          <div className="news-table-container">
+            <NewsTable
+              list={list}
+              onDismiss={this.onDismiss}
+            />
+          </div>
           <div className="pagination-container">
             <Button
-              onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}
+              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
             >
               More
             </Button>
