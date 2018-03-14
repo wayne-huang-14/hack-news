@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Table, Button, Form, Input, FormGroup } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '50';
@@ -165,6 +166,13 @@ const Search = ({ value, onChange, onSubmit, children }) =>
     </FormGroup>
     <Button type='submit'>{children}</Button>
   </Form>;
+  
+Search.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};
 
 const NewsTable = ({ list, onDismiss }) =>
   <Table striped>
@@ -197,6 +205,11 @@ const NewsTable = ({ list, onDismiss }) =>
     )}
     </tbody>
   </Table>;
+  
+  NewsTable.propTypes = {
+    list: PropTypes.array.isRequired,
+    onDismiss: PropTypes.func.isRequired,
+  };
 
 const CustomButton = ({ onClick, className = '', children }) =>
   <button
