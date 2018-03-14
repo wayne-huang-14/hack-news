@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import renderer from 'react-test-renderer';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import App, { Search, NewsTable } from './App';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('App', () => {
   
@@ -57,4 +61,10 @@ describe('NewsTable', () => {
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
+  
+  it ('shows two items in the list', () => {
+    const element = shallow(<NewsTable {...props} />);
+    
+    expect(element.find('.data-row').length).toBe(2);
+  })
 });

@@ -179,7 +179,7 @@ const NewsTable = ({ list, onDismiss }) =>
     </thead>
     <tbody>
     {list.map((item) =>
-      <tr key={item.objectID}>
+      <tr key={item.objectID} className='data-row'>
         <td>
           <a href={item.url}>{item.title}</a>
         </td>

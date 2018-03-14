@@ -109,7 +109,9 @@ exports[`NewsTable has a valid snapshot 1`] = `
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr
+      className="data-row"
+    >
       <td>
         <a
           href={undefined}
@@ -136,7 +138,9 @@ exports[`NewsTable has a valid snapshot 1`] = `
         </button>
       </td>
     </tr>
-    <tr>
+    <tr
+      className="data-row"
+    >
       <td>
         <a
           href={undefined}
