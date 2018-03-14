@@ -208,3 +208,8 @@ const CustomButton = ({ onClick, className = '', children }) =>
   </button>;
 
 export default App;
+
+export {
+  Search,
+  NewsTable
+};

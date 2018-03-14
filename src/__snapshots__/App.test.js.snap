@@ -1,0 +1,194 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App has a valid snapshot 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="main-container"
+  >
+    <div
+      className="search-container container"
+    >
+      <div
+        className="row justify-content-md-center"
+      >
+        <div
+          className="col-4"
+        >
+          <form
+            className="form-inline"
+            onSubmit={[Function]}
+          >
+            <div
+              className="mr-3 form-group"
+            >
+              <input
+                className="form-control"
+                id="inputNewsSearch"
+                onChange={[Function]}
+                type="text"
+                value="redux"
+              />
+            </div>
+            <button
+              className="btn btn-secondary"
+              onClick={[Function]}
+              type="submit"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      className="news-table-container"
+    >
+      <table
+        className="table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>
+              Title
+            </th>
+            <th>
+              Author
+            </th>
+            <th>
+              # of Comments
+            </th>
+            <th>
+              Points
+            </th>
+            <th>
+              Dismiss
+            </th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+    </div>
+    <div
+      className="pagination-container"
+    >
+      <button
+        className="btn btn-secondary"
+        onClick={[Function]}
+        type="button"
+      >
+        More
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`NewsTable has a valid snapshot 1`] = `
+<table
+  className="table table-striped"
+>
+  <thead>
+    <tr>
+      <th>
+        Title
+      </th>
+      <th>
+        Author
+      </th>
+      <th>
+        # of Comments
+      </th>
+      <th>
+        Points
+      </th>
+      <th>
+        Dismiss
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <a
+          href={undefined}
+        >
+          1
+        </a>
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        <button
+          className=""
+          onClick={[Function]}
+          type="button"
+        >
+          Dismiss
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a
+          href={undefined}
+        >
+          2
+        </a>
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        <button
+          className=""
+          onClick={[Function]}
+          type="button"
+        >
+          Dismiss
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`Search has a valid snapshot 1`] = `
+<form
+  className="form-inline"
+  onSubmit={undefined}
+>
+  <div
+    className="mr-3 form-group"
+  >
+    <input
+      className="form-control"
+      id="inputNewsSearch"
+      onChange={undefined}
+      type="text"
+      value={undefined}
+    />
+  </div>
+  <button
+    className="btn btn-secondary"
+    onClick={[Function]}
+    type="submit"
+  >
+    Search
+  </button>
+</form>
+`;
