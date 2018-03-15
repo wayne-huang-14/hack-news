@@ -73,13 +73,9 @@ exports[`App has a valid snapshot 1`] = `
     <div
       className="pagination-container"
     >
-      <button
-        className="btn btn-secondary"
-        onClick={[Function]}
-        type="button"
-      >
-        More
-      </button>
+      <div>
+        Loading...
+      </div>
     </div>
   </div>
 </div>
